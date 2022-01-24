@@ -15,7 +15,7 @@ public class Game2048 extends JPanel {
   private static final int TILE_SIZE = 64;
   private static final int TILES_MARGIN = 16;
 
-  private Tile[] myTiles;
+  public Tile[] myTiles;
   boolean myWin = false;
   boolean myLose = false;
   int myScore = 0;
@@ -345,13 +345,19 @@ public class Game2048 extends JPanel {
   }
 
   public static void main(String[] args) {
+    startGame();
+  }
+  public static Game2048 currentGame = new Game2048();
+
+  private static void startGame() {
     JFrame game = new JFrame();
     game.setTitle("2048 Game");
     game.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     game.setSize(340, 400);
     game.setResizable(false);
 
-    game.add(new Game2048());
+    game.add(currentGame);
+
 
     game.setLocationRelativeTo(null);
     game.setVisible(true);
