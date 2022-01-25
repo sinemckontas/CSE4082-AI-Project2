@@ -186,7 +186,7 @@ public class Game2048 extends JPanel {
     return newTiles;
   }
 
-  private Tile[] moveLine(Tile[] oldLine) {
+  public Tile[] moveLine(Tile[] oldLine) {
     LinkedList<Tile> l = new LinkedList<Tile>();
     for (int i = 0; i < 4; i++) {
       if (!oldLine[i].isEmpty())
@@ -204,7 +204,7 @@ public class Game2048 extends JPanel {
     }
   }
 
-  private Tile[] mergeLine(Tile[] oldLine) {
+  public Tile[] mergeLine(Tile[] oldLine) {
     LinkedList<Tile> list = new LinkedList<Tile>();
     for (int i = 0; i < 4 && !oldLine[i].isEmpty(); i++) {
       int num = oldLine[i].value;
@@ -233,7 +233,7 @@ public class Game2048 extends JPanel {
     }
   }
 
-  private Tile[] getLine(int index) {
+  public Tile[] getLine(int index) {
     Tile[] result = new Tile[4];
     for (int i = 0; i < 4; i++) {
       result[i] = tileAt(i, index);
@@ -241,7 +241,7 @@ public class Game2048 extends JPanel {
     return result;
   }
 
-  private void setLine(int index, Tile[] re) {
+  public void setLine(int index, Tile[] re) {
     System.arraycopy(re, 0, myTiles, index * 4, 4);
   }
 
@@ -257,7 +257,7 @@ public class Game2048 extends JPanel {
     }
   }
 
-  private void drawTile(Graphics g2, Tile tile, int x, int y) {
+  public void drawTile(Graphics g2, Tile tile, int x, int y) {
     Graphics2D g = ((Graphics2D) g2);
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
@@ -303,7 +303,7 @@ public class Game2048 extends JPanel {
 
   }
 
-  private static int offsetCoors(int arg) {
+  public static int offsetCoors(int arg) {
     return arg * (TILES_MARGIN + TILE_SIZE) + TILES_MARGIN;
   }
 
@@ -345,11 +345,27 @@ public class Game2048 extends JPanel {
   }
 
   public static void main(String[] args) {
-    startGame();
-  }
-  public static Game2048 currentGame = new Game2048();
+    Game2048 currentGame = new Game2048();
+    startGame(currentGame);
+    AIPlayer agent = new AIPlayer(currentGame);
 
-  private static void startGame() {
+  }
+/*
+    while (){
+    // sequence = [left, right,up]
+    sequence = exceptimax;
+    for(int i = 0; i < sequence.length(); i++){
+      String = sequence[i];
+      switch (String){
+        case "left":
+          currentGame.left();
+      }
+    }
+  }
+   */
+
+
+  public static void startGame(Game2048 currentGame) {
     JFrame game = new JFrame();
     game.setTitle("2048 Game");
     game.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
