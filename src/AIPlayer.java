@@ -7,7 +7,6 @@ enum NodeType {
 }
 
 public class AIPlayer {
-
     public static double expectimax(List<Game2048.Tile> myTiles, int depth,  NodeType nodeType) {
         int numofEmptyTiles=0;
         if (depth == 0) {
@@ -54,14 +53,14 @@ public class AIPlayer {
         }
 
         if(nodeType == NodeType.MAX) {
-            double luckynode = 0;
-            for(int i=0; i<16; i++) {
-                //if()
-            }
+            double evalL, evalR, evalU, evalD = 0;
+            List<Game2048.Tile> tilesCopy = new ArrayList<>(16);
+            Game2048.left();
         }
 
         return 0;
     }
+
 
     public static double evaluate() {
         return 0;
