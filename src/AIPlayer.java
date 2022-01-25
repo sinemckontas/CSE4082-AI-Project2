@@ -15,7 +15,7 @@ public class AIPlayer {
     public double expectimax(Game2048 currentStateOfTheGame, List<Game2048.Tile> myTiles, int depth, NodeType nodeType, int heuristic) {
         int numofEmptyTiles=0;
         if (depth == 0) {
-            return evaluate();
+            return evaluate(currentStateOfTheGame, heuristic);
         }
 
         for (int y=0; y<16; y++) {
@@ -54,8 +54,7 @@ public class AIPlayer {
                     return luckynode;
                 }
             }
-
-            return evaluate();
+            return evaluate(currentStateOfTheGame, heuristic);
         }
 
         if(nodeType == NodeType.MAX) {
