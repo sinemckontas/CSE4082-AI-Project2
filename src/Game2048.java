@@ -302,6 +302,7 @@ public class Game2048 extends JPanel {
     g.setFont(new Font(FONT_NAME, Font.PLAIN, 18));
     g.drawString("Score: " + myScore, 200, 365);
 
+
   }
 
   public static int offsetCoors(int arg) {
@@ -351,14 +352,16 @@ public class Game2048 extends JPanel {
     startGame(current);
     AIPlayer agent = new AIPlayer();
     Robot robot = new Robot();
-
+    double scoreTot = 0;
     while (!current.myWin || !current.myLose){
       // sequence = [left, right,up]
-
       ArrayList<String> sequence = new ArrayList<>();
       Game2048 clone = agent.clone(current);
-      agent.Expectimax2(clone, 1, 1, NodeType.MAX, sequence);
-      System.out.println(sequence);
+      double score = agent.Expectimax2(clone, 3, 1, NodeType.MAX, sequence);
+      scoreTot += score;
+      for (int k = 0; k < sequence.size() ; k++){
+        System.out.print(sequence.get(k) + " ");
+      }
       for (String choice : sequence) {
         if ("left".equals(choice)) {
           robot.keyPress(KeyEvent.VK_LEFT);
@@ -377,8 +380,10 @@ public class Game2048 extends JPanel {
       if (sequence.isEmpty()){
         break;
       }
-      }
+      System.out.println();
     }
+    System.out.println(scoreTot);
+  }
 
 
   public static void startGame(Game2048 currentGame) {

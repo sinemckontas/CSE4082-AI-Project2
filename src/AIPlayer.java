@@ -111,7 +111,7 @@ public class AIPlayer {
                     }
                 }
             }
-            System.out.println(canDoUp + " ");
+           // System.out.println(canDoUp + " ");
 
             for(int i = 0; i < 4; i ++){
                 if(i == 0 && canDoLeft){
