@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -343,26 +344,38 @@ public class Game2048 extends JPanel {
       return new Color(0xcdc1b4);
     }
   }
+  public static Game2048 current = new Game2048();
 
-  public static void main(String[] args) {
-    Game2048 currentGame = new Game2048();
-    startGame(currentGame);
-    AIPlayer agent = new AIPlayer(currentGame);
+  public static void main(String[] args) throws AWTException {
 
-  }
-/*
-    while (){
-    // sequence = [left, right,up]
-    sequence = exceptimax;
-    for(int i = 0; i < sequence.length(); i++){
-      String = sequence[i];
-      switch (String){
-        case "left":
-          currentGame.left();
+    startGame(current);
+    AIPlayer agent = new AIPlayer();
+    Robot robot = new Robot();
+
+    while (!current.myWin || !current.myLose ){
+      // sequence = [left, right,up]
+
+      ArrayList<String> sequence = new ArrayList<>();
+      Game2048 clone = agent.clone(current);
+      agent.Expectimax2(clone, 1, 1, NodeType.MAX, sequence);
+      System.out.println(sequence);
+      for (String choice : sequence) {
+        if ("left".equals(choice)) {
+          robot.keyPress(KeyEvent.VK_LEFT);
+          robot.keyRelease(KeyEvent.VK_LEFT);
+        }else if("right".equals(choice)){
+          robot.keyPress(KeyEvent.VK_RIGHT);
+          robot.keyRelease(KeyEvent.VK_RIGHT);
+        }else if ("up".equals(choice)){
+          robot.keyPress(KeyEvent.VK_UP);
+          robot.keyRelease(KeyEvent.VK_UP);
+        }else{
+          robot.keyPress(KeyEvent.VK_DOWN);
+          robot.keyRelease(KeyEvent.VK_DOWN);
+        }
+      }
       }
     }
-  }
-   */
 
 
   public static void startGame(Game2048 currentGame) {
