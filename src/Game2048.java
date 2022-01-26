@@ -356,12 +356,12 @@ public class Game2048 extends JPanel {
     while (!current.myWin || !current.myLose){
       // sequence = [left, right,up]
       ArrayList<String> sequence = new ArrayList<>();
+      ArrayList<Double> costList = new ArrayList<>();
+      ArrayList<String> seqToAdd = new ArrayList<>();
       Game2048 clone = agent.clone(current);
-      double score = agent.Expectimax2(clone, 3, 1, NodeType.MAX, sequence);
+      double score = agent.Expectimax2(clone, 3, 1, NodeType.MAX, sequence, costList, seqToAdd);
       scoreTot += score;
-      for (int k = 0; k < sequence.size() ; k++){
-        System.out.print(sequence.get(k) + " ");
-      }
+
       for (String choice : sequence) {
         if ("left".equals(choice)) {
           robot.keyPress(KeyEvent.VK_LEFT);

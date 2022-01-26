@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 enum NodeType {
     MAX,
@@ -20,7 +18,7 @@ public class AIPlayer {
 
     }
     //we send a deep copy of the current game state
-    public double Expectimax2(Game2048 currentStateOfTheGame, int depth, int heuristic, NodeType nodeType, ArrayList<String> sequence){
+    public double Expectimax2(Game2048 currentStateOfTheGame, int depth, int heuristic, NodeType nodeType, ArrayList<String> sequence, ArrayList<Double> costList, ArrayList<String> seqToAdd){
         int numofEmptyTiles=0;
 
         if (depth == 0){
@@ -29,6 +27,7 @@ public class AIPlayer {
 
         if (nodeType == NodeType.CHANCE){
             double chances = 0;
+            HashMap<Double, String> map = new HashMap<>();
             // getting the number of empty tiles
             for (int i = 0; i < 16; i++) {
                 if(currentStateOfTheGame.myTiles[i].isEmpty()) {
@@ -43,16 +42,40 @@ public class AIPlayer {
                             Game2048 clone = clone(currentStateOfTheGame);
                             clone.myTiles[i].value = 2;
                             double chance = 0.9 / numofEmptyTiles;
-                            chances += chance * Expectimax2(clone, depth - 1, heuristic, NodeType.MAX, sequence);
+                            double cost = Expectimax2(clone, depth - 1, heuristic, NodeType.MAX, sequence, costList, seqToAdd);
+                            if (sequence.size() > 0) {
+                                map.put(cost, sequence.get(sequence.size() - 1));
+                                sequence.remove(sequence.size() - 1);
+                            }
+
+                            chances += chance * cost;
+
                         }else{
                             Game2048 clone = clone(currentStateOfTheGame);
                             clone.myTiles[i].value = 4;
                             double chance = 0.1 / numofEmptyTiles;
-                            chances += chance * Expectimax2(clone, depth - 1, heuristic, NodeType.MAX, sequence);
+                            double cost = Expectimax2(clone, depth - 1, heuristic, NodeType.MAX, sequence, costList, seqToAdd);
+                            if (sequence.size() > 0) {
+                                map.put(cost, sequence.get(sequence.size() - 1));
+                                sequence.remove(sequence.size() - 1);
+                            }
+                            chances += chance * cost;
                         }
                     }
                 }
             }
+            double maxLeafCost = 0;
+            for (Map.Entry<Double, String> currentEntry : map.entrySet()){
+                if (currentEntry.getKey() > maxLeafCost){
+                    maxLeafCost = currentEntry.getKey();
+                }
+            }
+            if (map.get(maxLeafCost) != null){
+                sequence.add(map.get(maxLeafCost));
+                costList.add(maxLeafCost);
+            }
+
+
             return chances;
         }
 
@@ -111,25 +134,60 @@ public class AIPlayer {
                     }
                 }
             }
-           // System.out.println(canDoUp + " ");
 
             for(int i = 0; i < 4; i ++){
                 if(i == 0 && canDoLeft){
                     Game2048 clone = clone(currentStateOfTheGame);
                     clone.left();
-                    heuristicResultLeft = Expectimax2(clone, depth - 1, heuristic, NodeType.CHANCE, sequence);
+                    heuristicResultLeft = Expectimax2(clone, depth - 1, heuristic, NodeType.CHANCE, sequence, costList, seqToAdd);
+                    if (!costList.isEmpty()&& !sequence.isEmpty() && sequence.size() > costList.size()){
+                        double max = Collections.max(costList);
+                        int index = costList.indexOf(max);
+                        for (int x = sequence.size(); x > sequence.size() - costList.size(); x--){
+                            if (x != sequence.size() - index){
+                                sequence.remove(x);
+                            }
+                        }
+                    }
                 }else if(i == 1 && canDoRight){
                     Game2048 clone = clone(currentStateOfTheGame);
                     clone.right();
-                    heuristicResultRight = Expectimax2(clone, depth - 1, heuristic, NodeType.CHANCE, sequence);
+                    heuristicResultRight = Expectimax2(clone, depth - 1, heuristic, NodeType.CHANCE, sequence, costList, seqToAdd);
+                    if (!costList.isEmpty()&& !sequence.isEmpty() && sequence.size() > costList.size()){
+                        double max = Collections.max(costList);
+                        int index = costList.indexOf(max);
+                        for (int x = sequence.size(); x > sequence.size() - costList.size(); x--){
+                            if (x != sequence.size() - index){
+                                sequence.remove(x);
+                            }
+                        }
+                    }
                 }else if(i == 2 && canDoUp){
                     Game2048 clone = clone(currentStateOfTheGame);
                     clone.up();
-                    heuristicResultUp = Expectimax2(clone, depth - 1, heuristic, NodeType.CHANCE, sequence);
+                    heuristicResultUp = Expectimax2(clone, depth - 1, heuristic, NodeType.CHANCE, sequence, costList, seqToAdd);
+                    if (!costList.isEmpty() && !sequence.isEmpty() && sequence.size() > costList.size()){
+                        double max = Collections.max(costList);
+                        int index = costList.indexOf(max);
+                        for (int x = sequence.size(); x > sequence.size() - costList.size(); x--){
+                            if (x != sequence.size() - index){
+                                sequence.remove(x);
+                            }
+                        }
+                    }
                 }else if(i == 3 && canDoDown){
                     Game2048 clone = clone(currentStateOfTheGame);
                     clone.down();
-                    heuristicResultDown = Expectimax2(clone, depth - 1, heuristic, NodeType.CHANCE, sequence);
+                    heuristicResultDown = Expectimax2(clone, depth - 1, heuristic, NodeType.CHANCE, sequence, costList, seqToAdd);
+                    if (!costList.isEmpty()&& !sequence.isEmpty() && sequence.size() > costList.size()){
+                        double max = Collections.max(costList);
+                        int index = costList.indexOf(max);
+                        for (int x = sequence.size(); x > sequence.size() - costList.size(); x--){
+                            if (x != sequence.size() - index){
+                                sequence.remove(x);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -149,6 +207,7 @@ public class AIPlayer {
                 String down = "down";
                 sequence.add(down);
             }
+
             return maximumHeuristicResult;
         }
         return 0;
