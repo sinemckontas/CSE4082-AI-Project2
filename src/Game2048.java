@@ -352,7 +352,7 @@ public class Game2048 extends JPanel {
     AIPlayer agent = new AIPlayer();
     Robot robot = new Robot();
 
-    while (!current.myWin || !current.myLose ){
+    while (!current.myWin || !current.myLose){
       // sequence = [left, right,up]
 
       ArrayList<String> sequence = new ArrayList<>();
@@ -369,10 +369,13 @@ public class Game2048 extends JPanel {
         }else if ("up".equals(choice)){
           robot.keyPress(KeyEvent.VK_UP);
           robot.keyRelease(KeyEvent.VK_UP);
-        }else{
+        }else if("down".equals(choice)){
           robot.keyPress(KeyEvent.VK_DOWN);
           robot.keyRelease(KeyEvent.VK_DOWN);
         }
+      }
+      if (sequence.isEmpty()){
+        break;
       }
       }
     }

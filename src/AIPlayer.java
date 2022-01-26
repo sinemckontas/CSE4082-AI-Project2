@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 enum NodeType {
@@ -63,33 +64,54 @@ public class AIPlayer {
                 if (k == 0){
                     Game2048 clone = clone(currentStateOfTheGame);
                     clone.left();
-                    if (currentStateOfTheGame.myTiles == clone.myTiles){
-                        canDoLeft = false;
+                    for(int z = 0; z < currentStateOfTheGame.myTiles.length; z++){
+                        if (currentStateOfTheGame.myTiles[z].value != clone.myTiles[z].value){
+                            canDoLeft = true;
+                            break;
+                        }else {
+                            canDoLeft = false;
+                        }
                     }
                 }
                 if (k == 1){
                     Game2048 clone = clone(currentStateOfTheGame);
                     clone.right();
-                    if (currentStateOfTheGame.myTiles == clone.myTiles){
-                        canDoRight = false;
+                    for(int z = 0; z < currentStateOfTheGame.myTiles.length; z++){
+                        if (currentStateOfTheGame.myTiles[z].value != clone.myTiles[z].value){
+                            canDoRight = true;
+                            break;
+                        }else {
+                            canDoRight = false;
+                        }
                     }
                 }
                 if (k == 2){
                     Game2048 clone = clone(currentStateOfTheGame);
                     clone.up();
-                    if (currentStateOfTheGame.myTiles == clone.myTiles){
-                        canDoUp = false;
+                    for(int z = 0; z < currentStateOfTheGame.myTiles.length; z++){
+                        if (currentStateOfTheGame.myTiles[z].value != clone.myTiles[z].value){
+                            canDoUp = true;
+                            break;
+                        }else {
+                            canDoUp = false;
+                        }
                     }
+
                 }
                 if (k == 3){
                     Game2048 clone = clone(currentStateOfTheGame);
                     clone.down();
-                    if (currentStateOfTheGame.myTiles == clone.myTiles){
-                        canDoDown = false;
+                    for(int z = 0; z < currentStateOfTheGame.myTiles.length; z++){
+                        if (currentStateOfTheGame.myTiles[z].value != clone.myTiles[z].value){
+                            canDoDown = true;
+                            break;
+                        }else {
+                            canDoDown = false;
+                        }
                     }
                 }
             }
-
+            System.out.println(canDoUp + " ");
 
             for(int i = 0; i < 4; i ++){
                 if(i == 0 && canDoLeft){
@@ -114,16 +136,16 @@ public class AIPlayer {
             //find the max value
             double maximumHeuristicResult = Math.max(Math.max(heuristicResultLeft,heuristicResultRight),Math.max(heuristicResultUp,heuristicResultDown));
             //choosing left, right, up, down
-            if (maximumHeuristicResult == heuristicResultLeft){
+            if (maximumHeuristicResult == heuristicResultLeft && canDoLeft){
                 String left = "left";
                 sequence.add(left);
-            }else if (maximumHeuristicResult == heuristicResultRight){
+            }else if (maximumHeuristicResult == heuristicResultRight && canDoRight){
                 String right = "right";
                 sequence.add(right);
-            }else if (maximumHeuristicResult == heuristicResultUp){
+            }else if (maximumHeuristicResult == heuristicResultUp && canDoUp){
                 String up = "up";
                 sequence.add(up);
-            }else{
+            }else if(maximumHeuristicResult == heuristicResultDown && canDoDown){
                 String down = "down";
                 sequence.add(down);
             }
