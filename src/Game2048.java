@@ -350,19 +350,23 @@ public class Game2048 extends JPanel {
   public static void main(String[] args) throws AWTException {
 
     startGame(current);
-    AIPlayer agent = new AIPlayer();
+    AIPlayer2 agent = new AIPlayer2();
     Robot robot = new Robot();
     double scoreTot = 0;
     while (!current.myWin || !current.myLose){
       // sequence = [left, right,up]
-      ArrayList<String> sequence = new ArrayList<>();
-      ArrayList<Double> costList = new ArrayList<>();
-      ArrayList<String> seqToAdd = new ArrayList<>();
-      Game2048 clone = agent.clone(current);
-      double score = agent.Expectimax2(clone, 3, 1, NodeType.MAX, sequence, costList, seqToAdd);
+
+      Game2048 clone = agent.clone2(current);
+      Node rootNode = agent.newNode(clone);
+
+      double score = agent.Expectimax(rootNode, 3, 7, AIPlayer2.NodeType.MAX);
       scoreTot += score;
 
+      System.out.println();
+      ArrayList<String> sequence = rootNode.sequence;
+      //System.out.println(sequence.isEmpty());
       for (String choice : sequence) {
+        System.out.print(choice + " ");
         if ("left".equals(choice)) {
           robot.keyPress(KeyEvent.VK_LEFT);
           robot.keyRelease(KeyEvent.VK_LEFT);
@@ -399,4 +403,6 @@ public class Game2048 extends JPanel {
     game.setLocationRelativeTo(null);
     game.setVisible(true);
   }
+
+
 }
