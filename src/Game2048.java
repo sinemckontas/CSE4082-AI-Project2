@@ -359,13 +359,19 @@ public class Game2048 extends JPanel {
       Game2048 clone = agent.clone2(current);
       Node rootNode = agent.newNode(clone);
 
-      double score = agent.Expectimax(rootNode, 3, 7, AIPlayer2.NodeType.MAX);
+      double score = agent.Expectimax(rootNode, 1, 7, AIPlayer2.NodeType.MAX);
       scoreTot += score;
 
       System.out.println();
       ArrayList<String> sequence = rootNode.sequence;
+
       //System.out.println(sequence.isEmpty());
-      for (String choice : sequence) {
+
+
+      if (sequence.isEmpty()){
+        break;
+      }else{
+        String choice = sequence.get(0);
         System.out.print(choice + " ");
         if ("left".equals(choice)) {
           robot.keyPress(KeyEvent.VK_LEFT);
@@ -380,9 +386,6 @@ public class Game2048 extends JPanel {
           robot.keyPress(KeyEvent.VK_DOWN);
           robot.keyRelease(KeyEvent.VK_DOWN);
         }
-      }
-      if (sequence.isEmpty()){
-        break;
       }
       System.out.println();
     }
